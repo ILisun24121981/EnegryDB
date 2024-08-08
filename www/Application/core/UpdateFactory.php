@@ -51,24 +51,11 @@ class UserUpdateFactory extends UpdateFactory {
         $values['login'] = $obj->getLogin();
         $values['hash'] = $obj->getHash();
         $values['password'] = $obj->getPassword();
-        $values['role'] = $obj->getRole();
+        $values['role_id'] = $obj->getRoleId();
         if ($id > -1) {
             $cond['id'] = $id;
         }
-        return $this->buildStatement("user", $values, $cond);
+        return $this->buildStatement("users", $values, $cond);
     }
 }
-class LocationUpdateFactory extends UpdateFactory {
-    function newUpdate(DomainObject $obj) {
-        $id = $obj->getId();
-        $cond = null;
-        $values['name'] = $obj->getName();
-        $values['hash'] = $obj->getHash();
-        $values['password'] = $obj->getPassword();
-        $values['role'] = $obj->getRole();
-        if ($id > -1) {
-            $cond['id'] = $id;
-        }
-        return $this->buildStatement("user", $values, $cond);
-    }
-}
+

@@ -43,7 +43,7 @@ class UserSelectionFactory extends SelectionFactory{
          print "Создается UserSelectionFactory<br>";
     }   
     function buildCore($fields) {
-        return "SELECT $fields FROM user";
+        return "SELECT $fields FROM users";
     }
 }
 class LocationStructureSelectionFactory extends SelectionFactory{    

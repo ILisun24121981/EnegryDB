@@ -79,16 +79,13 @@ abstract class Registry {
         $ins->set('User_id',$user->getId());
         $ins->set('User_login',$user->getLogin());
         $ins->set('User_hash',$user->getHash());
-        $ins->set('User_role_Id',$user->getRole());
-        $ins->set('User_location_id',$user->getRole());
+        $ins->set('User_role_Id',$user->getRoleId());
+        $ins->set('User_location_id',$user->getLocationId());
     }
     static function getUserParams(){
         $userParams = array();
         $ins = self::instance();
         $userParams['id'] = $ins->get('User_id');
-        if($userParams['id'] == null){
-            return null;
-        }
         $userParams['login'] = $ins->get('User_login');
         $userParams['hash'] = $ins->get('User_hash');
         $userParams['role_id'] = $ins->get('User_role_Id');
@@ -153,9 +150,13 @@ class ApplicationRegistry {
         self::setUserDB($userDB);
         $passwordDB = (string)$options->passwordDB;      
         $this->ensure($passwordDB,"PassworsDB не найден");
-        self::setPasswordDB($passwordDB);                   
-        $map = new ControllerMap($options);       
-        $this->ApplicationController = new ApplicationController($map);
+        self::setPasswordDB($passwordDB);
+        
+        $map = new ControllerMap();
+        $map->init($options);
+        
+        $req = RequestRegistry::getRequest();
+        $this->ApplicationController = new ApplicationController($map,$req);
     } 
     
     private function ensure($expr,$message){

@@ -16,44 +16,40 @@ class ControllerMap {
     private $forwardMap     = array();
     private $classrootMap   = array();
     
-    function _constructor(&$options){
-        init($options);
-    }
-    
-    function init($options){
+    function init(SimpleXMLElement &$options){
         foreach ($options->view as $default_view){           
             $stat_str = trim($default_view['status']);
-            $status = Command::statuses($stat_str);
-            $map->addview( trim((string)$default_view),'default',$status);                                 
+            $status = Command::status($stat_str);
+            $this->addview( trim((string)$default_view),'default',$status);                                 
         }                     
         foreach ($options->command as $command){
             $cmd_name= trim($command['name']);
             if(isset($command->classroot)){
-                $map->addClassroot($cmd_name,trim((string)$command->classroot[0]));
+                $this->addClassroot($cmd_name,trim((string)$command->classroot[0]));
             }
             if(isset($command->forward)){               
-                $map->addForward($cmd_name,trim((string)$status->forward[0]));
+                $this->addForward($cmd_name,trim((string)$status->forward[0]));
             }
             if (isset($command->view)) {
                 foreach ($command->view as $view){
                     if(isset($view['status'])) {
                         $stat_str = trim($view['status']);
-                        $stat = Command::statuses($stat_str);
-                        $map->addView(trim((string)$view),$cmd_name,$stat);
+                        $stat = Command::status($stat_str);
+                        $this->addView(trim((string)$view),$cmd_name,$stat);
                     }else{
-                        $map->addView(trim((string)$view),$cmd_name);
+                        $this->addView(trim((string)$view),$cmd_name);
                     }
                 }
             }
             if(isset($command->status)){
                 foreach ($command->status as $status){                                
                     $stat_str = trim($status['value']);
-                    $stat = Command::statuses($stat_str);
+                    $stat = Command::status($stat_str);
                     if(isset($status->view)){                       
-                        $map->addView(trim((string)$status->view[0]),$cmd_name,$stat);
+                        $this->addView(trim((string)$status->view[0]),$cmd_name,$stat);
                     }
                     if(isset($status->forward)){ 
-                        $map->addForward($cmd_name,trim((string)$status->forward[0]),$stat);
+                        $this->addForward($cmd_name,trim((string)$status->forward[0]),$stat);
                     }
                 }                            
             }     

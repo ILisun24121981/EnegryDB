@@ -1,22 +1,30 @@
 
-<?php        
-    $loginValue = $req->getProperty('login');
-    $loginValidateErrorMassage = Validator::$Massage['login'];
-    $passwordValue = $req->getProperty('Password');
-    $passwordValidateErrorMassage = Validator::$Massage['password'];
-    $massage = $req->getFeedbackString();    
+<?php
+    $loginValue = $request->getProperty('login');
+    if($loginValue){
+        $loginValidateErrorMassage = Validator::$Massage['login'];
+    }
+    $passwordValue = $request->getProperty('password');
+    if($passwordValue){
+        $passwordValidateErrorMassage = Validator::$Massage['password'];
+    }
+    $massage = $request->getFeedbackString();
 ?>
 
 
 
 <div>    
-    <p>Авторизация Саня</p>  
+    <p>Авторизация</p>  
     <form method = "GET" id = "LoginForm" >
-        <?php echo "<label> $massage </label>";  ?>
+        <?php 
+        if(!is_null($massage)){
+            echo "<label> $massage </label>";
+        }
+        ?>
         <input  name = "cmd"  type = "hidden" value = "Login"> <br>
         <label> Логин </label> 
-        <input  name = "Login" type = "text" <?php         
-            if(!is_null($loginValidateErrorMassage)){
+        <input  name = "login" type = "text" <?php         
+            if(isset($loginValidateErrorMassage)){
                 echo "> <label>{$loginValidateErrorMassage}</label>"; 
             }else{
                 echo "value ='{$loginValue}'>";
@@ -24,8 +32,8 @@
         ?>
         <br>               
         <label> Пароль </label>
-        <input  name = "Password" type = "password" <?php   
-            if(!is_null($passwordValidateErrorMassage)){
+        <input  name = "password" type = "password" <?php   
+            if(isset($passwordValidateErrorMassage)){
                 echo  "> <label>{$passwordValidateErrorMassage}</label>"; 
             }else{
                 echo "value = '{$passwordValue}'>";

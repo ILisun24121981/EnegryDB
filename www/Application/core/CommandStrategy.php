@@ -6,17 +6,20 @@ abstract class CommandStrategy {
 
 class FreeStrategy extends CommandStrategy{
     function execute(Command $cmd){       
-        return $cmd ->execute($cmd);
+        $cmd ->commonExecute();
     }
 }
 
 class AccessStrategy extends CommandStrategy{
-    function execute(Command $cmd){
-        $acm = new AccessCheckModel();        
-        if($acm->process()){      
-            return $cmd->execute($cmd);   
-        }       
-        return Command::status('CMD_ERROR') ;
+    private $_accessCheckModel;
+    
+    function _construct(array $roles){
+        $this->_accessCheckModel = new AccessCheckModel($roles);
+    }
+    function execute(Command $cmd){ 
+        if($this->_accessCheckModel->process()){      
+            $cmd ->commonExecute();
+        }          
     }
 }
 

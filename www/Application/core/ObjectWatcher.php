@@ -69,7 +69,7 @@ class ObjectWatcher {
     static function addClean(DomainObject $obj){
         $inst = self::instance();
         //unset($inst->delete[$inst->globalKey[$obj]]);
-        unset($inst->dirty[$inst->globalKey[$obj]]);
+        unset($inst->dirty[$inst->globalKey($obj)]);
         $inst->new = array_filter($inst->new, function($a) use ($obj){return !($a === $obj);});
     }
     

@@ -11,27 +11,26 @@
  *
  * @author Lisun
  */
-require_once 'core/Model.php';
 require_once 'core/PersistenceFactory.php';
 require_once 'core/DomainObject.php';
 require_once 'core/Request.php';
 require_once 'core/Registry.php';
 
-class AccessOpenModel extends Model{  
-    function process(){         
-        $login = $this->req->getProperty('login');        
-        $password =$this->req->getProperty('password');              
+class AccessOpenModel {    
+    function process(Request $req){         
+        $login = $req->getProperty('login');        
+        $password =$req->getProperty('password');              
         $finder = PersistenceFactory::getFinder('user');
         $idobj = $finder->factory->getIdentityObject();
         $idobj->field('login')->eq($login);   
         $user = $finder->findOne($idobj);
         if(is_null($user)){
-            $this->req->addFeedback("Проверьте Логин");
+            $req->addFeedback("Проверьте Логин");
             //print "AccessModel res:FALSE<br>";  
             return false;            
         }
         if($user->getPassword() != $password){
-            $this->req->addFeedback("Проверьте Пароль");
+            $req->addFeedback("Проверьте Пароль");
             //print "AccessModel res:FALSE<br>";
             return false;
         }

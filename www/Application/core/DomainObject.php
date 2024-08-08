@@ -65,10 +65,10 @@ class User extends DomainObject {
 //    const MANAGER = 2;
 //    const TECHNICIAN = 4;
     private static $ROLE_STRINGS = array(
-        'SUPERUSER'=>0,
-        'ADMIN'=>1,
-        'MANAGER'=>2,
-        'TECHNICIAN'=>3
+        'SUPERUSER'=>1,
+        'ADMIN'=>2,
+        'MANAGER'=>3,
+        'TECHNICIAN'=>4
     );
 
     protected $_login;
@@ -82,11 +82,11 @@ class User extends DomainObject {
         print ("массив для создания объекта: ");
         var_dump($array);       
         print ("<br>");        
-        $this->login  = $array['login'];
-        $this->password = $array['password'];
-        $this->hash = $array['hash'];
-        $this->role_id = $array['role_id'];
-        $this->location_id = $array['location_id'];
+        $this->_login  = $array['login'];
+        $this->_password = $array['password'];
+        $this->_hash = $array['hash'];
+        $this->_role_id = $array['role_id'];
+        $this->_location_id = $array['location_id'];
         if(isset ($array['id'])){
            parent::__construct($array['id']);
         }else{          
@@ -133,7 +133,7 @@ class User extends DomainObject {
         $this->markDirty();
     }
     function getLocationId() {
-        return $this->_login;
+        return $this->_location_id;
     }  
 }
 //class SuperUser extends User {

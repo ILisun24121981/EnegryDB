@@ -4,7 +4,9 @@
         <title>Главная страница</title>
         <link href="css/maket.css" rel="stylesheet" type="text/css">    
     </head>
-        
+    <?php
+        $request = RequestRegistry::getRequest();
+    ?>    
     <body>       
         <div id="container"> 
             <?php

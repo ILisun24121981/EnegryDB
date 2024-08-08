@@ -21,19 +21,15 @@ class Controller {
     }
     
     static function run(){              
-        $instance = new Controller();
-        $instance ->init();            
+        $instance = new Controller();            
         $instance->handleRequest();
-    }
-    
-    function init(){
-        ApplicationRegistry::instance()->init();     
     }
         
     function handleRequest(){
         RequestRegistry::instance();
-        $req = new Request();       
+        $req = new Request();
+        ApplicationRegistry::instance()->init();   
         $process = new SessionRequest(new LogRequest(new MainProcess()));
-        $process->process($req);       
+        $process->process();       
     }        
 }

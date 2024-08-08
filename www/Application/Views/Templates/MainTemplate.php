@@ -23,7 +23,7 @@
     <?php
     require_once 'core/ObjectWatcher.php';
     $userParams = SessionRegistry::getUserParams();
-    if(!$userParams !=null){ 
+    if(Empty($userParams)){ 
         $user = ObjectWatcher::exists('Admin', $userParams['id']);
     }
     ?>  

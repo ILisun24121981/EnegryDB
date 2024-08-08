@@ -17,30 +17,24 @@ require_once 'core/Controller.php';
 require_once 'core/View.php';
 
 abstract class ProcessRequest {
-
-    abstract function process(Request $req);
+    abstract function process();
 }
 
 abstract class DecorateProcess extends ProcessRequest {
-
     protected $processrequest;
-
     function __construct(ProcessRequest $pr) {
         $this->processrequest = $pr;
     }
 }
 
 class MainProcess extends ProcessRequest {
-
-    function process(Request $req) {       
-        //print __CLASS__ . ":выполнение запроса <br>";
+    function process() {       
         $app_c = ApplicationRegistry::getApplicationController();
-        while ($cmd = $app_c->getCommand($req)) {
+        while ($cmd = $app_c->getCommand()) {
             $cmd->execute();
         }
-        $this->invokeView($app_c->getView($req));       
+        $this->invokeView($app_c->getView());       
     }
-
     function invokeView($target) {
         print "<br>Вид команды:$target";
         $view = new View();
@@ -50,20 +44,16 @@ class MainProcess extends ProcessRequest {
 }
 
 class LogRequest extends DecorateProcess {
-
-    function process(Request $req) {
+    function process() {
         //print __CLASS__.":регистрация запроса <br>";
-        $this->processrequest->process($req);
+        $this->processrequest->process();
     }
-
 }
 
 class SessionRequest extends DecorateProcess {
-
-    function process(Request $req) {
+    function process() {
         SessionRegistry::instance();
         //print __CLASS__.":Создание Сессии <br>";
-        $this->processrequest->process($req);
+        $this->processrequest->process();
     }
-
 }

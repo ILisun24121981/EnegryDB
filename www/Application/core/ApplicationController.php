@@ -14,87 +14,74 @@
 require_once 'core/Command.php';
 require_once 'core/Validator.php';
 require_once 'core/Registry.php';
+require_once 'Commands/LoginCommand.php';
 
 
 class ApplicationController {
     private static $base_cmd;
-    private static $default_cmd;
-    private $controllerMap;
-    private $invoked = array();
+    private $_request;
+    private $_map;
+    private $_invoked = array();
     
     
-    function __construct(ControllerMap $map) {
-        $this->controllerMap =$map;
-        if(! self::$base_cmd){
-            self::$base_cmd = new ReflectionClass("Command");
-            $defaultCmdName = SessionRegistry::getDefaultCommandName();
-            if($defaultCmdName != null){
-                
-            }else{
-                 self::$default_cmd = new LoginViewCommand();
-            }           
-        }   
+    function __construct(ControllerMap $map,Request $req) {
+        $this->_request = $req;
+        $this->_map =$map;      
+        self::$base_cmd = new ReflectionClass("Command");                
     }
     
-    function getView (Request $req){        
-        $view = $this->getResource($req,"View");        
+    function getView (){        
+        $view = $this->getResource("View");        
         return $view;      
     }   
-    function getForward(Request $req){       
-        $forward = $this->getResource($req,"Forward");
+    function getForward (){       
+        $forward = $this->getResource("Forward");
         if($forward){
-            $req->setProperty('cmd', $forward);
+            $this->_request->setProperty('cmd', $forward);
         }
         return $forward;
     }
        
-    private function getResource(Request $req, $res){
+    private function getResource($res){
         //определим предыдущую команду и ее код состояния
-        $cmd_str = $req->getProperty('cmd');
-        $previous = $req->getLastCommand();
+        $cmd_Name = $this->_request->getProperty('cmd');
+        $cmd_real_Name = $this->_map->getClassroot($cmd_Name); 
+        $previous = $this->_request->getLastCommand();
         $status = $previous->getStatus();       
         $acquire = "get$res";       
         //определим ресурс для предидущей команды и ее кода состояния
-        $resource = $this->controllerMap->$acquire($cmd_str,$status);        
-        //определим альтернативный ресурс для команды и кода состояния 0
-        if(!$resource){
-            $resource = $this->controllerMap->$acquire($cmd_str, 0);
-        }        
-//        //Либо для команды 'default' и текущего кода состояния
-//        if(!$resource){
-//            $resource = $this->controllerMap->$acquire('Default', $status);
-//        }
-//        //Если ничего не найдено , определим ресурс для команды 'default' и кода состояния 0
-//        if(!$resource){
-//            $resource = $this->controllerMap->$acquire('Default', 0);
-//        }     
+        $resource = $this->_map->$acquire($cmd_real_Name,$status);            
         return $resource;       
     }
     
-    function  getCommand(Request $req){
+    function  getCommand(){
         $sep = DIRECTORY_SEPARATOR;              
-        $previous = $req->getLastCommand();
+        $previous = $this->_request->getLastCommand();
         if(!$previous){
             //print "<br>Это первая команда текущего запроса<br>";
-            $cmd = $req->getProperty('cmd');                    
-            $cmd = str_replace(array('.',$sep),"",$cmd);
-            if (preg_match('/\W/', $cmd)) {
-                throw new AppException("Недопустимые символы в комманде");
-            }            
-            if(!$cmd){
-                $req->setProperty('cmd', 'Default');              
-                return self::$default_cmd;
-            }
+            $cmd_Name = $this->_request->getProperty('cmd'); 
+            if(!$cmd_Name){
+                $cmd_Name = SessionRegistry::getDefaultCommandName();
+                if(!$cmd_Name){
+                    $cmd_Name = 'Default';
+                    $this->_request->setProperty('cmd', 'Default');                                 
+                }             
+            }else{
+                $cmd_Name = str_replace(array('.',$sep),"",$cmd_Name);
+                if (preg_match('/\W/', $cmd_Name)) {
+                    throw new AppException("Недопустимые символы в комманде");
+                }    
+            }                               
         }else{
-            $cmd = $this->getForward($req);
-            if(!$cmd){return null;};
+            $cmd_Name = $this->getForward($this->_request);
+            if(!$cmd_Name){return null;};
         }       
-        $cmd_obj = $this->resolveCommand($cmd);        
+        $cmd_obj = $this->resolveCommand($cmd_Name);        
         $cmd_class = get_class($cmd_obj);
-        if(isset($this->invoked[$cmd_class])){
+        if(isset($this->_invoked[$cmd_class])){
             throw new AppException("Циклический вызов");
         }
-        $this->invoked[$cmd_class]=1;       
+        $this->_invoked[$cmd_class]=1;       
         return $cmd_obj;
     }
     
@@ -108,8 +95,7 @@ class ApplicationController {
             if(class_exists($classname)){              
                 $cmd_class = new ReflectionClass($classname);                
                 if($cmd_class->isSubclassOf(self::$base_cmd)){
-                    $req = &$this->_request;
-                    return $cmd_class->newInstance($req);
+                    return $cmd_class->newInstance($this->_request);
                 }
                 throw new AppException("function:resolveCommand - Класс '$cmd_class' не является командой");
             }

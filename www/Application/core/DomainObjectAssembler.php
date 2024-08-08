@@ -16,8 +16,8 @@ require_once 'core/IdentityObject.php';
 require_once 'core/DomainObject.php';
 
 class DomainObjectAssembler {
-
-    protected static $PDO; //put your code here
+    public $factory;
+    protected static $PDO;
 
     function __construct(PersistenceFactory $factory) {
         print ("Создание Finder = DomainObjectAssembler (" . get_class($factory) . ")<br>");
@@ -37,12 +37,9 @@ class DomainObjectAssembler {
         };
     }
 
-    function getStatement($str) {
-        if (!isset($this->statement[$str])) {
-            print("Подготовленное выражение: " . $str . "<br>");
-            $this->statement[$str] = self::$PDO->prepare($str);
-        }
-        return $this->statement[$str];
+    function getStatement($str) {      
+        print("Подготовленное выражение: " . $str . "<br>");
+        return  self::$PDO->prepare($str);    
     }
 
     function findOne(IdentityObject $idobj) {

@@ -16,10 +16,9 @@ require_once 'core/Registry.php';//
 class Request {
     private $properties;
     private $feedback = array();   
-    private $cmd_obj;
+    private $cmd_obj = null;
     
     function __construct(){
-        $this->cmd_obj = null; 
         $this->init();        
         RequestRegistry::setRequest($this);
     }
@@ -75,7 +74,10 @@ class Request {
     }
     
     function getFeedbackString($separator ="\n"){
-        return implode($separatpr,$this->feedback);
+        if(!Empty($this->feedback)){
+            return implode($separator,$this->feedback);
+        }
+        return null;
     } 
     
     function getLastCommand(){

@@ -1,16 +1,18 @@
 <?php
+require_once 'core/CommandStrategy.php';
+require_once 'Models/AccessCloseModel.php';
 
 class LogoutCommand extends Command{
-    function __construct() {
+    function __construct(Request $req) {
         $ss = new FreeStrategy();
-        parent::__construct($ss);
+        parent::__construct($ss,$req);
     } 
-    function mainExecute(Request $req) { 
-        $acm = new AccessCloseModel($req);
+    function mainExecute() { 
+        $acm = new AccessCloseModel();
         $res = $acm -> process();
         if($res){
            SessionRegistry::clearAll(); 
-           return self::status( 'CMD_OK' ); 
+           return self::status(); 
         }
         return self::status( 'CMD_ERROR' );
     }

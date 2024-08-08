@@ -27,13 +27,9 @@ class Validator {
 
         self::$validSimbols = function($v){                      
             //$cmd = str_replace(array('.',$sep),"",$v);
-            if (preg_match('/\W/', $v)) {
-                print "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF";
-                var_dump($v);
-               //return("Недопустимые символы");
-            }
-            var_dump($v);
-            print "DDDDDDDDDDDDDDDDDDDDDDDDDDD";
+            if (preg_match('/\W/', $v)) {              
+               return("Недопустимые символы");
+            }           
             return true;
         };
         

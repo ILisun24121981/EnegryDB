@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<control>
-    
+
+<control>   
     <dsn>mysql:host=127.0.0.1;dbname=energydb;charset=UTF8</dsn>
     <userDB>root</userDB>
     <passwordDB>admin</passwordDB>
+    
+    <command name = "Default">   
+        <classroot>Logout</classroot>                                                       
+    </command>
                                
-    <command name = 'Login'>
+    <command name = "Login">  
         <status value = "CMD_OK">        
-            <view>MainView<view>             
+            <view>MainView</view>              
         </status>
         <status value = "CMD_ERROR">        
             <view>LoginView</view>              
@@ -22,11 +21,10 @@ and open the template in the editor.
         </status>                                         
     </command>
     
-    <command name = 'Logout'>   
+    <command name = "Logout">   
         <view>LoginView</view>                                                       
     </command>
     
-       
 </control>
 
    
