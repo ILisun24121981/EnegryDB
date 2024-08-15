@@ -10,10 +10,6 @@ require_once 'core/Command.php';
 
 
 class LoginCommand extends ValidateCommand {
-    function __construct(Request $req) {
-        $ss = new FreeStrategy();
-        parent::__construct($ss,$req);
-    } 
     function validExecute() {      
         $Am = new AccessOpenModel();
         $res = $Am->process($this->_request);        
@@ -22,10 +18,10 @@ class LoginCommand extends ValidateCommand {
         }       
         return self::status('CMD_OK');
     }
-    function setValidators() {
+    function setValidators() {       
+        $this->AddValidator('password', Validator::$validSimbols);
+        $this->AddValidator('password', Validator::$MoreSimbols->__invoke(3));
         $this->AddValidator('login', Validator::$validSimbols);
         $this->AddValidator('login', Validator::$MoreSimbols->__invoke(4));
-        $this->AddValidator('password', Validator::$validSimbols);
-        $this->AddValidator('password', Validator::$MoreSimbols->__invoke(3));       
     }    
 }

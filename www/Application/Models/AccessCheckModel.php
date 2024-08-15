@@ -17,11 +17,11 @@ class AccessCheckModel{
         } else {
             //ищем в созданных объектах
             $user = ObjectWatcher::exists('User', $userParams['id']);
-            if(is_null($obj)){
+            if(is_null($user)){
                 //ищем в базе данных
                 $finder = PersistenceFactory::getFinder('User');
                 $idobj = $finder->factory->getIdentityObject();
-                $idobj->field('login')->eq($userParams['login']);
+                $idobj->compField('login')->eq($userParams['login']);
                 $user = $finder->findOne($idobj); 
                 if (is_null($user)){
                     $this->req->addFeedback("Пользователь не определен");
@@ -31,7 +31,7 @@ class AccessCheckModel{
             }                            
             ApplicationRegistry::setUser($user);
             if(!empty($this->_roles)){
-                $role = $obj->getRoleId();
+                $role = $user->getRoleId();
                 foreach($this->_roles as $key =>$role_id){
                     if ($role = $role_id) {
                         break;

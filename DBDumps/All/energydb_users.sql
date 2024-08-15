@@ -16,32 +16,37 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `locations`
+-- Table structure for table `users`
 --
 
-DROP TABLE IF EXISTS `locations`;
+DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `locations` (
+CREATE TABLE `users` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `type_id` int NOT NULL,
-  `name` varchar(45) NOT NULL,
-  `comment` varchar(500) DEFAULT NULL,
+  `role_id` int NOT NULL,
+  `login` varchar(45) NOT NULL,
+  `password` varchar(45) NOT NULL,
+  `hash` varchar(45) DEFAULT NULL,
+  `location_id` int NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `idPartsLocation_UNIQUE` (`id`),
-  KEY `fk_location_type_idx` (`type_id`),
-  CONSTRAINT `fk_l_type` FOREIGN KEY (`type_id`) REFERENCES `location_types` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  UNIQUE KEY `login_UNIQUE` (`login`),
+  KEY `fk_role_idx` (`role_id`),
+  KEY `fk_u_location_idx` (`location_id`),
+  CONSTRAINT `fk_u_location` FOREIGN KEY (`location_id`) REFERENCES `locations` (`id`),
+  CONSTRAINT `fk_u_role` FOREIGN KEY (`role_id`) REFERENCES `user_roles` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `locations`
+-- Dumping data for table `users`
 --
 
-LOCK TABLES `locations` WRITE;
-/*!40000 ALTER TABLE `locations` DISABLE KEYS */;
-INSERT INTO `locations` VALUES (1,1,'Global','Parent of all locations');
-/*!40000 ALTER TABLE `locations` ENABLE KEYS */;
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,1,'ILisun','24121981',NULL,1),(2,1,'AKrasnoyarov','07011983',NULL,1);
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -53,4 +58,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-08-06 14:48:53
+-- Dump completed on 2024-08-09 17:23:22

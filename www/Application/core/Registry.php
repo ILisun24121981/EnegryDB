@@ -1,26 +1,12 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of Registry
- *
- * @author Lisun
- */
+require_once 'core/CommonBase.php';
 require_once 'core/ControllerMap.php';
 require_once 'core/ApplicationController.php';
 require_once 'core/Command.php';
 
-abstract class Registry {
-    abstract protected function get($key);
-    abstract protected function set($key,$val);    //put your code here
-}
- class RequestRegistry extends Registry{
-     private $values = array();
+
+ class RequestRegistry extends SetGetValues{
      private static $instance;
      
      private function __construct(){
@@ -32,24 +18,12 @@ abstract class Registry {
         }
         return self::$instance;
     }
-    protected function get($key){
-        if(isset ($this->values[$key])){
-            return $this->values[$key];
-        }
-        return null;
-    }   
-    protected function set($key, $val) {
-        $this-> values[$key]=$val;
-    }
     static function  getRequest(){
         return self::instance()->get('request');
     }
     static function setRequest(Request $request){
         return self::instance()->set('request',$request);
     }
-//    static function getUserMapper(){
-//        return new UserMapper();
-//    }
  } 
  
  class SessionRegistry {
@@ -94,7 +68,8 @@ abstract class Registry {
     }
     static function setDefaultCommandName($cmd_obj){
         $ins = self::instance();
-        $ins->set('DefaultCmdName',get_class($cmd_obj));
+        $cmdName = trim(get_class($cmd_obj),'Command');
+        $ins->set('DefaultCmdName',$cmdName);
     }
     static function getDefaultCommandName(){    
         return self::instance()->get('DefaultCmdName');
@@ -104,7 +79,7 @@ abstract class Registry {
     }
 }
 
-class ApplicationRegistry {
+class ApplicationRegistry extends SetGetValues{
     private static $instance;
     private $freezedir = "Application\Data";
     private $Configs = "Options.xml";   
@@ -164,7 +139,7 @@ class ApplicationRegistry {
             throw new AppException($message);
         }
     }  
-    protected function get($key){
+//    protected function get($key){
 //        $path = $this->freezedir.DIRECTORY_SEPARATOR.$this->configs;
 //        if(file_exists($path)){
 //            clearstatcache();
@@ -177,19 +152,13 @@ class ApplicationRegistry {
 //                $this->mtimes[$key]=$mtime;                
 //                return ($this->values[$key]=  unserialize($data));
 //            }     
-//        }
-//        
-        if(isset($this->values[$key])){
-            return $this->values[$key];
-        }
-        return null;
-    }    
-    protected function set($key,$val){
-        $this->values[$key]=$val;
+//        }  
+//   }    
+//    protected function set($key,$val){
 //        $path = $this->freezedir.DIRECTORY_SEPARATOR.$key;
 //        file_put_contents($path, serialize($val));
 //        $this->mtimes[$key]=time();
-    }
+//    }
     
 //    
     static function  getDSN(){

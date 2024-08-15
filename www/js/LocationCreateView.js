@@ -1,24 +1,9 @@
-$(document).ready(function () {
-   
-    
-   
+$(document).ready(function () {  
     $("body").on("change", "select[name=Company]", function () {      
         $(this).parents('form').submit();
     });
     $("body").on("change", ".departure_region", function () {
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
     $(".route").change(function () {
         var route_id = $(this).val();
         var dataString = 'route_id=' + route_id;

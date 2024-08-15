@@ -1,18 +1,7 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of Validator
- *
- * @author Lisun
- */
 class Validator {
-    static $Massage = array();
+    private static $Massage = array();
     
     static $MoreSimbols;
     static $validSimbols;
@@ -44,5 +33,11 @@ class Validator {
     static function AddMassage($field,$massage){
         self::$Massage[$field] = $massage;
     }
-    
+    static function GetMassage($field){
+        if(isset(self::$Massage[$field])){
+            return self::$Massage[$field];
+        }else{
+            return null;
+        }
+    }
 }

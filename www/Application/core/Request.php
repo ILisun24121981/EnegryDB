@@ -12,11 +12,11 @@
  * @author Lisun
  */
 require_once 'core/Registry.php';//
+require_once 'core/CommonBase.php';//
 
-class Request {
-    private $properties;
-    private $feedback = array();   
-    private $cmd_obj = null;
+class Request extends SetGetValues{
+    private $_feedback = array();   
+    private $_executed_cmd_object = null;
     
     function __construct(){
         $this->init();        
@@ -25,7 +25,7 @@ class Request {
     
     function init(){
         if(isset($_SERVER["REQUEST_METHOD"])){          
-            $this->properties = $_REQUEST;             
+            $this->setAll($_REQUEST);             
             return;
         }
 //        var_dump($_SERVER);
@@ -42,49 +42,43 @@ class Request {
             foreach ($par_val as $p_v){
                 if(strpos($p_v,'=')){                                            
                     list($key,$val)=explode("=",$p_v);
-                    $this->setProperty($key,$val);                  
+                    $this->set($key,$val);                  
                 }
             }
             //var_dump($this->properties);
 //            if(strpos($arg,'=')){                                            
 //                list($key,$val)=explode("=",$arg);
-//                $this->setProperty($key,$val);
+//                $this->set($key,$val);
 //            }
         }
-        $this->setProperty('REQUEST_URI' ,$_SERVER['REQUEST_URI']);
-        $this->setProperty('REQUEST_TIME',$_SERVER['REQUEST_TIME']);
-        $this->setProperty('REMOTE_ADDR',$_SERVER['REMOTE_ADDR']);
+        $this->set('REQUEST_URI' ,$_SERVER['REQUEST_URI']);
+        $this->set('REQUEST_TIME',$_SERVER['REQUEST_TIME']);
+        $this->set('REMOTE_ADDR',$_SERVER['REMOTE_ADDR']);
     } 
        
-    function setProperty($key,$val){
-        $this->properties[$key]=$val;
-    }
-    
-    function getProperty($key){        
-        if(isset($this->properties[$key])){
-            return $this->properties[$key];
-        }
-    }    
     function addFeedback($msg){
-        array_push($this->feedback,$msg);       
+        array_push($this->_feedback,$msg);       
     }
     
     function getFeedback(){
-        return $this->feedback;
+        return $this->_feedback;
     }
     
     function getFeedbackString($separator ="\n"){
-        if(!Empty($this->feedback)){
-            return implode($separator,$this->feedback);
+        if(!Empty($this->_feedback)){
+            return implode($separator,$this->_feedback);
         }
         return null;
     } 
+    function setCmdName($name){
+       $this->set('cmd',$name);
+    }
     
     function getLastCommand(){
-        return $this->cmd_obj;
+        return $this->_executed_cmd_object;
     }
     
     function setLastCommand(Command $cmd_obj){
-        $this->cmd_obj = $cmd_obj;
+        $this->_executed_cmd_object = $cmd_obj;
     }
 }

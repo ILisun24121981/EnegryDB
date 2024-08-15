@@ -22,9 +22,10 @@ abstract class DomainObject {
 
     function __construct($id = null) {
         if(is_null($id)){
-            $this->markNew();
+            $this->markNew();//Создается не из базы данных
         } else{
-            $this->id = $id;           
+            $this->id = $id;
+            $this->markClean();//Создается из базы данных
         }
     }
     function getId() {
@@ -54,16 +55,12 @@ abstract class DomainObject {
     function markDirty(){//когда делаются изменения в объекте
         ObjectWatcher::addDirty($this);
     }
-    function markClean(){//после записи измененного объекта в БД
+    function markClean(){//после записи измененного объекта в БД б либо при создании из базы данных
         ObjectWatcher::addClean($this);
     }
 }
 
 class User extends DomainObject {
-//    const SUPERUSER = 0;
-//    const ADMIN = 1;
-//    const MANAGER = 2;
-//    const TECHNICIAN = 4;
     private static $ROLE_STRINGS = array(
         'SUPERUSER'=>1,
         'ADMIN'=>2,
@@ -71,17 +68,20 @@ class User extends DomainObject {
         'TECHNICIAN'=>4
     );
 
-    protected $_login;
-    protected $_password;
-    protected $_hash;
-    protected $_role_id;
-    protected $_location_id;
+    private $_login;
+    private $_password;
+    private $_hash;
+    private $_role_id;
+    private $_location_id;
+    
+    protected $_locationCollection;
+    
 
     function __construct(array $array) { 
-        print "Создается UserDomainObject<br>";
-        print ("массив для создания объекта: ");
-        var_dump($array);       
-        print ("<br>");        
+        //print "Создается UserDomainObject<br>";
+        //print ("массив для создания объекта: ");
+        //var_dump($array);       
+        //print ("<br>");        
         $this->_login  = $array['login'];
         $this->_password = $array['password'];
         $this->_hash = $array['hash'];
@@ -134,61 +134,48 @@ class User extends DomainObject {
     }
     function getLocationId() {
         return $this->_location_id;
-    }  
+    }
+    function setLocationsCollection(LocationCollection $locations) {
+        $this->_locationCollection = $locations;
+    }
+
+    function getLocationsCollection() {      
+        return $this->_locationCollection;
+    }
 }
-//class SuperUser extends User {
-//    function __construct(array $array) {
-//        print "Создается SuperUserDomainObject<br>";
-//        parent::__construct($array);
-//    }   
-//}
-//
-//class Admin extends User {         
-//    function __construct(array $array) {
-//        print "Создается AdminDomainObject<br>";
-//        parent::__construct($array);
-//    }  
-//}
-//
-//class Manager extends User {        
-//    function __construct(array $array) {
-//        print "Создается ManagerDomainObject<br>" ;    
-//        parent::__construct($array);
-//    }
-//}
-//
-//class Technician extends User {        
-//    function __construct(array $array) {
-//        print "Создается TechnicianDomainObject<br>";       
-//        parent::__construct($array);
-//    }
-//}
 
 class Location extends DomainObject {
-    private $_type_id;
+    private $_type;
     private $_name;
     private $_comment;
     
     function __construct(array $array) {
-        print "Создается LocationDomainObject<br>";
-        parent::__construct($array);
+        //print "Создается LocationDomainObject<br>";
+        $this->_type  = $array['type_name'];
+        $this->_name = $array['name'];
+        $this->_comment = $array['comment'];
+        if(isset ($array['id'])){
+           parent::__construct($array['id']);
+        }else{          
+           parent::__construct(); 
+        }
     }
     
-    function setName($login) {       
-        $this->_name = $login;        
+    function setName($name) {       
+        $this->_name = $name;        
         $this->markDirty();
     }
     function getName() {
         return $this->_name;
     } 
-    function setType($login) {       
-        $this->_type_id = $login;        
+    function setType($typeName) {       
+        $this->_type = $typeName;        
         $this->markDirty();
     }
     function getType() {
-        return $this->_type_id;
+        return $this->_type;
     }  
-    function setComment($login) {       
+    function setComment($comment) {       
         $this->_comment = $login;        
         $this->markDirty();
     }

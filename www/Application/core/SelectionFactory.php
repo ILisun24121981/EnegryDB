@@ -2,18 +2,10 @@
 
 abstract class SelectionFactory {    
     function newSelection(IdentityObject $obj) {
-        $fields = $obj->getObjectFields();
-        $alias = $obj->getAlias();
-         if(!is_null($alias)){
-            foreach ($alias as $key => $value){                
-                $i = array_search($key, $fields);
-                if($i){
-                    $fields[$i] = $key.' AS '.$value;
-                }
-            }
-        }
-        $fields = implode(',', $fields);  
-        $core = $this->buildCore($fields);
+        $obj->assignAliases();
+        $selFields = $obj->getSelectFieldsNames();       
+        $selFields = implode(',', $selFields);  
+        $core = $this->buildCore($selFields);
         list($where,$values) = $this ->buildWhere($obj);        
         return array($core." ".$where, $values);
     }  
@@ -23,12 +15,7 @@ abstract class SelectionFactory {
         }
         $compstrings = array();
         $values = array();
-        foreach ($obj->getComps() as $comp){           
-//                $comp['name']= preg_replace('/_id/','.id',$comp['name']);
-//                print "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF";
-//                var_dump($comp['name']);
-//               //return("Недопустимые символы");
-//            //}
+        foreach ($obj->getComps() as $comp){
             $compstrings[] = "{$comp['name']}{$comp['operator']} ?";
             $values[]= $comp['value'];    
         }            
@@ -46,11 +33,15 @@ class UserSelectionFactory extends SelectionFactory{
         return "SELECT $fields FROM users";
     }
 }
-class LocationStructureSelectionFactory extends SelectionFactory{    
+class LocationSelectionFactory extends SelectionFactory{    
     function __construct() {
-         print "Создается LocationStructureSelectionFactory<br>";
+         print "Создается LocationSelectionFactory<br>";
     }   
     function buildCore($fields) {
-        return "SELECT $fields FROM location_structure";
+        return "SELECT $fields FROM 
+            (
+                (location_structure INNER JOIN locations ON location_structure.child_id = locations.id)
+                INNER JOIN location_types ON locations.type_id = location_types.id
+            )";
     }
 }

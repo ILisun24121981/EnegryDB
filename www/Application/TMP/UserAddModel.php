@@ -14,12 +14,12 @@
 class UserAddModel extends Model {
     function process() {
         $array = array();
-        $array['Login'] =$this->req->getProperty('Login');        
-        $array['Password'] =$this->req->getProperty('Password');
-        $array['Role_id'] =$this->req->getProperty('Role_id');
-        $array['Location_id'] =$this->req->getProperty('Location_id');
+        $array['Login'] =$this->req->get('Login');        
+        $array['Password'] =$this->req->get('Password');
+        $array['Role_id'] =$this->req->get('Role_id');
+        $array['Location_id'] =$this->req->get('Location_id');
                      
-        $factory = LocationPersistenceFactory::create();
+        $factory = UserPersistenceFactory::create();
         $obj = $factory->getDomainObjectFactory()->createObject($array);      
         $finder = $factory->finder();
         $finder->insert($obj);

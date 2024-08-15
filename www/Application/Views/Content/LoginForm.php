@@ -1,14 +1,16 @@
 
 <?php
-    $loginValue = $request->getProperty('login');
-    if($loginValue){
-        $loginValidateErrorMassage = Validator::$Massage['login'];
+    if($request->get('cmd') != 'Logout'){
+        $loginValue = $request->get('login');
+        if($loginValue){
+            $loginValidateErrorMassage = Validator::getMassage('login');
+        }
+        $passwordValue = $request->get('password');
+        if($passwordValue){
+            $passwordValidateErrorMassage = Validator::getMassage('password');
+        }
+        $massage = $request->getFeedbackString();
     }
-    $passwordValue = $request->getProperty('password');
-    if($passwordValue){
-        $passwordValidateErrorMassage = Validator::$Massage['password'];
-    }
-    $massage = $request->getFeedbackString();
 ?>
 
 
@@ -17,17 +19,20 @@
     <p>Авторизация</p>  
     <form method = "GET" id = "LoginForm" >
         <?php 
-        if(!is_null($massage)){
+        if(isset($massage) && !is_null($massage)){
             echo "<label> $massage </label>";
         }
         ?>
-        <input  name = "cmd"  type = "hidden" value = "Login"> <br>
         <label> Логин </label> 
         <input  name = "login" type = "text" <?php         
             if(isset($loginValidateErrorMassage)){
                 echo "> <label>{$loginValidateErrorMassage}</label>"; 
             }else{
-                echo "value ='{$loginValue}'>";
+                if($request->get('cmd') != 'Logout'){
+                    echo "value ='{$loginValue}'>";
+                }else{
+                    echo ">";
+                }
             } 
         ?>
         <br>               
@@ -36,11 +41,15 @@
             if(isset($passwordValidateErrorMassage)){
                 echo  "> <label>{$passwordValidateErrorMassage}</label>"; 
             }else{
-                echo "value = '{$passwordValue}'>";
+                if($request->get('cmd') != 'Logout'){
+                    echo "value = '{$passwordValue}'>";
+                }else{
+                    echo "value = ''>";
+                }
             }  
         ?>
         <br> 
-        <input  type="submit" value = "Войти">
+        <button  name = "cmd" type="submit" value = "Login">Войти</button>
     </form>   
 </div>
 

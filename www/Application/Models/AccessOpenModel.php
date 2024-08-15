@@ -18,11 +18,11 @@ require_once 'core/Registry.php';
 
 class AccessOpenModel {    
     function process(Request $req){         
-        $login = $req->getProperty('login');        
-        $password =$req->getProperty('password');              
-        $finder = PersistenceFactory::getFinder('user');
+        $login = $req->get('login');        
+        $password =$req->get('password');              
+        $finder = PersistenceFactory::getFinder('User');
         $idobj = $finder->factory->getIdentityObject();
-        $idobj->field('login')->eq($login);   
+        $idobj->compField('login')->eq($login);   
         $user = $finder->findOne($idobj);
         if(is_null($user)){
             $req->addFeedback("Проверьте Логин");

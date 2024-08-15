@@ -11,7 +11,7 @@
                                
     <command name = "Login">  
         <status value = "CMD_OK">        
-            <view>MainView</view>              
+            <forward>LocationsList</forward>              
         </status>
         <status value = "CMD_ERROR">        
             <view>LoginView</view>              
@@ -23,6 +23,12 @@
     
     <command name = "Logout">   
         <view>LoginView</view>                                                       
+    </command>
+    
+    <command name = "LocationsList"> 
+        <status value = "CMD_OK">    
+            <view>LocationsListView</view> 
+        </status>                                                      
     </command>
     
 </control>

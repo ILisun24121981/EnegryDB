@@ -1,16 +1,5 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of Request
- * классы алгоритма обработки HTTP запроса (шаблон Decorator)
- * @author Lisun
- */
 require_once 'core/Registry.php';
 require_once 'core/Request.php';
 require_once 'core/Controller.php';
@@ -36,7 +25,7 @@ class MainProcess extends ProcessRequest {
         $this->invokeView($app_c->getView());       
     }
     function invokeView($target) {
-        print "<br>Вид команды:$target";
+        print "<br>Вид:$target";
         $view = new View();
         include("Views/$target.php");
         exit();

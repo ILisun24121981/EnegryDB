@@ -41,7 +41,6 @@ abstract class UpdateFactory {
         }
         return array($query, $terms);
     }
-
 }
 
 class UserUpdateFactory extends UpdateFactory {

@@ -1,4 +1,4 @@
-<p> Основное меню </p>   
+<p> Разделы </p>   
 <form method = "GET" id = "HeaderMenu" >
     <?php 
     echo'<button  name = "cmd" type="submit" value = "Items">Номенклатура</button>

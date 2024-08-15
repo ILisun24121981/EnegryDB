@@ -2,7 +2,7 @@
     <head>
         <meta charset="utf-8">
         <title>Главная страница</title>
-        <link href="css/maket.css" rel="stylesheet" type="text/css">
+        <link href="css/common.css" rel="stylesheet" type="text/css">
         <?php
         if(!empty($css)){
             foreach ($css as $num => $cssFile){
@@ -10,7 +10,8 @@
             }
         }
         ?>
-        <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+        <script type="text/javascript" src="js/jquery-latest.min.js"></script>
+        <script type="text/javascript" src="js/common.js"></script>
         <?php
         if(!empty($js)){
             foreach ($js as $num => $jsFile){

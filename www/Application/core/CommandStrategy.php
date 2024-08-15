@@ -11,15 +11,18 @@ class FreeStrategy extends CommandStrategy{
 }
 
 class AccessStrategy extends CommandStrategy{
-    private $_accessCheckModel;
-    
-    function _construct(array $roles){
-        $this->_accessCheckModel = new AccessCheckModel($roles);
+    private $_roles;
+    function _construct(array $roles = null){
+        $this->_roles = $roles;
     }
-    function execute(Command $cmd){ 
-        if($this->_accessCheckModel->process()){      
+    function execute(Command $cmd){
+        $acm = new AccessCheckModel($this->getRoles());
+        if($acm->process()){      
             $cmd ->commonExecute();
         }          
+    }
+    function getRoles(){
+        return $this->_roles;
     }
 }
 

@@ -14,53 +14,77 @@
 require_once 'core/Field.php';
 
 class IdentityObject {
-
-    protected $currentfield = null;
-    protected $fields = array();//созданные поля с операторами сравнения для sql запроса
-    private $and = null;
-    private $enforce = array();// Массив корректных имен полей 
-    private $alias = null;
     
-    function __construct($field = null, array $enforce = null,array $alias = null) {
-        if (!is_null($enforce)) {
-            $this->enforce = $enforce;
+    protected $_curCompField = null;
+    protected $_compFields;//Массив созданных полей сравнения(с условиями сравнения) для оператора Where
+    private $_selectFildsNames;//Массив имен полей для выборки
+    private $_fieldNames;// Массив допустимых полей сравнения
+    private $_aliases; // Массив алиасов полей сравнения
+    
+    function __construct(array $_fieldNames,array $aliases =null) {
+        if (!is_null($_fieldNames)) {
+            $this->_fieldNames = $_fieldNames;
         }
-        if (!is_null($alias)) {
-            $this->alias = $alias;
+        if (!is_null($aliases)) {
+            foreach($aliases as $aliase=>$value){
+                $this->checkField($aliase);
+            }
+            $this->_aliases = $aliases;
+        }      
+    }
+   
+    function getSelectFieldsNames() {
+        if(empty($this->_selectFildsNames)){
+            return $this->_fieldNames;//все поля
         }
-        if (!is_null($field)) {
-            $this->field($field);
+        return $this->_selectFildsNames;
+    }
+    
+    function assignAliases(){
+        if(!is_null($this->_aliases)){
+            foreach ($this->_aliases as $alias => $value){                
+                $i = array_search($alias, $this->_selectFildsNames);
+                if(is_integer($i)){
+                    $this->_selectFildsNames[$i] = $value.' AS '.$alias;
+                }
+            }
         }
     }
-
-    function getObjectFields() {     
-        return $this->enforce;
-    }
-    function getAlias() {     
-        return $this->alias;
-    }
-    function field($fieldname) {
-        if (!$this->isVoid() && $this->currentfield->isIncomplete()) {
-            throw new Exception("Неполное поле:".$this->currentfield->getName());
+    function SelectFields(array $fieldNames){
+        foreach($fieldNames as $key =>$fieldName){
+            $this->checkField($fieldName);
         }
-        $this->enforceField($fieldname);
-        if (isset($this->fields[$fieldname])) {
-            $this->currentfield = $this->fields[$fieldname];
+        $this->_selectFildsNames = $fieldNames;
+    }
+    function compField($fieldName) {
+        if (!$this->isVoid() && $this->_curCompField->isIncomplete()) {
+            throw new Exception("Неполное поле сравнения:".$this->_curCompField->getName());
+        }
+        $this->checkField($fieldName);
+        if($this->_aliases){
+            foreach ($this->_aliases as $alias => $value){                
+                if($fieldName == $alias){
+                    $fieldName = $value;
+                }   
+            }
+        }
+        if (isset($this->_compFields[$fieldName])) {
+            $this->_curCompField = $this->_compFields[$fieldName];
         } else {
-            $this->currentfield = new Field($fieldname);        
-            $this->fields[$fieldname] = $this->currentfield;     
+            $this->_curCompField = new Field($fieldName);        
+            $this->_compFields[$fieldName] = $this->_curCompField;     
         }
         return $this;
     }
     //Проверка на наличие полей
     function isVoid() {
-        return empty($this->fields);
+        return empty($this->_compFields);
     }
-    //Проверка имени поля на корректность
-    function enforceField($fieldname) {
-        if (!in_array($fieldname, $this->enforce) && !empty($this->enforce)) {
-            $forcelist = implode(',', $this->enforce);
-            throw new Exception("{$fieldname} не является корректным полем {$forcelist}");
+    //Проверка имени поля на корректность(возможность выбора в качестве поля сравнения)
+    private function checkField($fieldName) {
+        if (!in_array($fieldName, $this->_fieldNames) && !empty($this->_fieldNames)) {
+            $copmFieldNames = implode(',', $this->_fieldNames);
+            throw new Exception("{$fieldName} не является корректным полем {$copmFieldNames}");
         }
     }
     function eq($value) {
@@ -76,12 +100,12 @@ class IdentityObject {
         if ($this->isVoid()) {
             throw new Exception("Поле не определено");
         }
-        $this->currentfield->addTest($simbol, $value);
+        $this->_curCompField->addTest($simbol, $value);
         return $this;
     }
     function getComps() {
         $ret = array();
-        foreach ($this->fields as $key => $field) {
+        foreach ($this->_compFields as $key => $field) {
             $ret = array_merge($ret, $field->getComps());
         }
     return $ret;
@@ -91,20 +115,19 @@ class IdentityObject {
 class UserIdentityObject extends IdentityObject {
     function __construct($field = null) {
         print "Создается UserIdentityObject<br>";
-        parent::__construct($field, array('id', 'login', 'password', 'hash', 'role_id', 'location_id'));
+        parent::__construct(array('id', 'login', 'password', 'hash', 'role_id', 'location_id'));
     }
 }
 
 class LocationIdentityObject extends IdentityObject {
     function __construct($field = null) {
         print "Создается LocationIdentityObject<br>";
-        parent::__construct($field, array('id', 'type_id', 'name', 'comment'));
+        parent::__construct(array('id','name','comment','type_name','parent_id'),
+                array ('id'=>'location_structure.child_id',
+                       'name'=>'locations.name',
+                       'comment'=>'locations.comment',
+                       'type_name'=>'location_types.name',
+                       'parent_id'=>'location_structure.parent_id'));       
     }
 }
 
-class LocationStructureIdentitiObject extends IdentityObject{
-    function __construct($field = null) {
-        print "Создается LocationIdentityObject<br>";
-        parent::__construct($field, array('id', 'parent_id', 'child_id'));
-    }
-}

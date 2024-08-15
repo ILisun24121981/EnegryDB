@@ -1,23 +1,11 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of AddCompanyModel
- *
- * @author Lisun
- */
-class LocationAddModel extends Model {
-
+class LocationCreateModel extends Model {
     function process() {
         $array = array();
-        $array['Name'] = $this->req->getProperty('Name');        
-        $array['Type_id'] =$this->req->getProperty('Type_id');
-        $array['Parent_id'] =$this->req->getProperty('Parent_id');     
+        $array['name'] = $this->req->get('name');        
+        $array['type_id'] =$this->req->get('type_id');
+        $array['parent_id'] =$this->req->get('parent_id');     
                
         $factory = locationPersistenceFactory::create();
         $obj = $factory->getDomainObjectFactory()->createObject($array);      

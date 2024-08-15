@@ -3,31 +3,46 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/Views/LocationSelectView.php</file>
             <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/Commands/LogoutCommand.php</file>
             <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/index.php</file>
+            <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/Models/LocationSelectModel.php</file>
+            <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/core/ObjectWatcher.php</file>
+            <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/Commands/LocationSelectCommand.php</file>
             <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/core/Command.php</file>
             <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/core/Collection.php</file>
             <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/TMP/UserAddCommand.php</file>
             <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/core/ProcessRequest.php</file>
+            <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/core/UpdateFactory.php</file>
+            <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/core/SelectionFactory.php</file>
             <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/core/DomainObject.php</file>
             <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/core/CommandStrategy.php</file>
             <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/Views/Templates/MainTemplate.php</file>
             <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/Views/LoginView.php</file>
+            <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/TMP/LocationCollectionModel.php</file>
             <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/core/IdentityObject.php</file>
+            <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/core/PersistenceFactory.php</file>
             <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/core/Controller.php</file>
-            <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/Views/MainView.php</file>
             <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/Commands/LoginCommand.php</file>
+            <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/core/CommonBase.php</file>
             <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/core/Field.php</file>
             <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/Models/AccessCheckModel.php</file>
             <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/Views/Content/Header.php</file>
-            <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/core/DomainObjectAssembler.php</file>
+            <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/Models/AccessCloseModel.php</file>
             <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/core/ApplicationController.php</file>
             <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/core/ControllerMap.php</file>
+            <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/core/DomainObjectAssembler.php</file>
             <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/Views/Templates/LoginTemplate.php</file>
+            <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/core/DomainObjectFactory.php</file>
+            <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/TMP/LocationAddModel.php</file>
             <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/TMP/MainViewCommand.php</file>
             <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/Models/AccessOpenModel.php</file>
             <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/Views/Content/LoginForm.php</file>
+            <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/core/Request.php</file>
+            <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/core/Interfaces.php</file>
             <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/Data/Options.xml</file>
+            <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/Views/Content/HeaderMenu.php</file>
+            <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/Views/Content/LocationsList.php</file>
             <file>file:/C:/Users/ILisun/Work/DataBase/Energy/www/Application/core/Registry.php</file>
         </group>
     </open-files>

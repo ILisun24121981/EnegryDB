@@ -5,7 +5,7 @@ require_once 'core/PersistenceFactory.php';
 class LocationCollectionModel extends Model {
     function process(){        
         $user = ApplicationRegistry::getUser();
-        $finder = PersistenceFactory::getFinder('LocationStructure');
+        $finder = PersistenceFactory::getFinder('Location');
         $idobj = $finder->factory->getIdentityObject();
         $idobj->field('parent_id')->eq($user->getLocationId());
         $collection = $finder->find($idobj);

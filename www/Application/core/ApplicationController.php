@@ -37,14 +37,17 @@ class ApplicationController {
     function getForward (){       
         $forward = $this->getResource("Forward");
         if($forward){
-            $this->_request->setProperty('cmd', $forward);
+            $this->_request->set('cmd', $forward);
         }
         return $forward;
     }
        
     private function getResource($res){
         //определим предыдущую команду и ее код состояния
-        $cmd_Name = $this->_request->getProperty('cmd');
+        $cmd_Name = $this->_request->get('cmd');
+        if(!isset($cmd_Name)){
+            $cmd_Name = SessionRegistry::getDefaultCommandName();
+        }
         $cmd_real_Name = $this->_map->getClassroot($cmd_Name); 
         $previous = $this->_request->getLastCommand();
         $status = $previous->getStatus();       
@@ -59,12 +62,12 @@ class ApplicationController {
         $previous = $this->_request->getLastCommand();
         if(!$previous){
             //print "<br>Это первая команда текущего запроса<br>";
-            $cmd_Name = $this->_request->getProperty('cmd'); 
+            $cmd_Name = $this->_request->get('cmd'); 
             if(!$cmd_Name){
                 $cmd_Name = SessionRegistry::getDefaultCommandName();
                 if(!$cmd_Name){
                     $cmd_Name = 'Default';
-                    $this->_request->setProperty('cmd', 'Default');                                 
+                    $this->_request->setCmdName($cmd_Name);                                 
                 }             
             }else{
                 $cmd_Name = str_replace(array('.',$sep),"",$cmd_Name);

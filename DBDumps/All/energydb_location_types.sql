@@ -16,37 +16,29 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `users`
+-- Table structure for table `location_types`
 --
 
-DROP TABLE IF EXISTS `users`;
+DROP TABLE IF EXISTS `location_types`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `users` (
+CREATE TABLE `location_types` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `role_id` int NOT NULL,
-  `login` varchar(45) NOT NULL,
-  `password` varchar(45) NOT NULL,
-  `hash` varchar(45) DEFAULT NULL,
-  `location_id` int NOT NULL,
+  `name` varchar(45) NOT NULL COMMENT 'Storage, Hub',
+  `comment` varchar(500) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `id_UNIQUE` (`id`),
-  UNIQUE KEY `login_UNIQUE` (`login`),
-  KEY `fk_role_idx` (`role_id`),
-  KEY `fk_u_location_idx` (`location_id`),
-  CONSTRAINT `fk_u_location` FOREIGN KEY (`location_id`) REFERENCES `locations` (`id`),
-  CONSTRAINT `fk_u_role` FOREIGN KEY (`role_id`) REFERENCES `user_roles` (`id`)
+  UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `users`
+-- Dumping data for table `location_types`
 --
 
-LOCK TABLES `users` WRITE;
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,1,'ILisun','24121981',NULL,1),(2,1,'AKrasnoyarov','07011983',NULL,1);
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+LOCK TABLES `location_types` WRITE;
+/*!40000 ALTER TABLE `location_types` DISABLE KEYS */;
+INSERT INTO `location_types` VALUES (1,'Хаб','Локация с которой возможен трансфер на другой хаб'),(2,'Место','Локация - место хранения.');
+/*!40000 ALTER TABLE `location_types` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -58,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-08-06 14:30:10
+-- Dump completed on 2024-08-09 17:23:22

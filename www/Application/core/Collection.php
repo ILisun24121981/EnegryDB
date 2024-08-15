@@ -74,7 +74,7 @@ abstract class Collection implements MyIterator {
 }
 
 class UserCollection extends Collection{
-    function __construct(array $raw = null, UserDomainObjectFactory $dofactory = null) {        
+    function __construct(array $raw = null,DomainObjectFactory $dofactory = null) {
         print "Создается UserCollection<br>";
         parent::__construct($raw,$dofactory);
     }
@@ -84,13 +84,19 @@ class UserCollection extends Collection{
 }
 
 class LocationCollection extends Collection{
-    function __construct(array $raw = null) {
-        $dofactory = new CompanyDomainObjectFactory();
+    private $_parentLocationName;
+    function __construct(array $raw = null,DomainObjectFactory $dofactory = null) {
         print "Создается LocationCollection<br>";
         parent::__construct($raw,$dofactory);
     }
     function targetClass() {
         return "Location";
-    }   
+    }
+    function setParentLocationName($parentLocationName){
+        $this->_parentLocationName;
+    }
+    function getParentLocationName(){
+        return $this->_parentLocationName;
+    }
 }
 

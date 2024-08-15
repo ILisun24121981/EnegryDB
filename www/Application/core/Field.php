@@ -12,29 +12,32 @@
  * @author Lisun
  */
 class Field {
-    protected $name = null;
-    protected $operator = null;
-    protected $comps = array();
-    protected $incomplite = false;
+    protected $_name = null;
+    protected $_operator = null;
+    protected $_comps = array();
+    protected $_incomplite = false;
     
     function __construct($name) {
         print ("Создание класса Field с параметром name = ".$name."<br>");
-        $this->name = $name;
+        $this->_name = $name;
     }
     function addtest($operator, $value){
-        $this->comps[] = array('name'=>$this->name,'operator'=>$operator,'value'=>$value);
-        print("добавленный в класс Field с name = ".$this->name." comp: ");
-        var_dump($this->comps);
+        $this->_comps[] = array('name'=>$this->_name,'operator'=>$operator,'value'=>$value);
+        print("добавленный в класс Field с name = ".$this->_name." comp: ");
+        var_dump($this->_comps);
         print("<br>");
     }
     function getComps(){
-        return $this->comps;
+        return $this->_comps;
     }
     function isIncomplite(){
-        return empty($this->comps);
+        return empty($this->_comps);
     }
     function getName(){
-        return $this->name;
+        return $this->_name;
+    }
+    function setName($name){
+        $this->_name = $name;
     }
 }
 
