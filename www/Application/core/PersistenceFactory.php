@@ -19,69 +19,72 @@ require_once 'core/UpdateFactory.php';
 require_once 'core/IdentityObject.php';
 
 
-abstract class PersistenceFactory {
-    private $type;
-    private $instance;
+class PersistenceFactory {
+    private $_type;
     
-    function __construct() {
-        $this->type = static::getType();
-        print("Создается".$this->type."PersistanceFactory<br>");       
+    private function __construct() {
+        $this->_type = static::getType();
+        print("Создается".$this->_type."PersistanceFactory<br>");       
+    } 
+    static function getInstance($typestr){
+        $pfact=$typestr."PersistenceFactory"; 
+        return new $pfact();
     }
-    function getCollection(array $raw){
-        $typestr = $this->type;
-        $coll = $typestr."Collection";
-        return new $coll($raw,$this->instance->getDomainObjectFactory());
+    // Создает объект хранящий поля и условия выборки
+    function getIdentityObject(){
+        $typestr = $this->_type;
+        $idobj = $typestr."IdentityObject";
+        return new $idobj();
     }
-    function getDomainObjectFactory(){
-        $typestr = $this->type;
-        $dof = $typestr."DomainObjectFactory";
-        return new $dof();
-    }
+    // Создает объект конструирующий выражение выборки из базы данных на основе identity object(объект хранящий поля и условия выборки)
     function getSelectionFactory(){
-        $typestr = static::getType();
+        $typestr = $this->_type;
         $sfact = $typestr."SelectionFactory";
         return new $sfact();
     }
     function getUpdateFactory(){
-        $typestr = static::getType();
+        $typestr = $this->_type;
         $upfact = $typestr."UpdateFactory";
         return new $upfact();
     }
-    function getIdentityObject(){
-        $typestr = static::getType();
-        $idobj = $typestr."IdentityObject";
-        return new $idobj();
+    // Создает объект коллекции из массива полученного из базы данных
+    function getCollection(array $raw){
+        $typestr = $this->_objectType;
+        $coll = $typestr."Collection";
+        return new $coll($raw,$this->getDomainObjectFactory());
     }
-//    static function getFactory($typestr){
-//        $pfact=$typestr."PersistenceFactory"; 
-//        return new $pfact();
-//    }
-    static function create(){
-        $pfact = new static();      
-        return $pfact->setInstance($pfact);       
+    // Создает объект фабрику по созданию объектов 
+    private function getDomainObjectFactory(){
+        $typestr = $this->_objectType;
+        $dof = $typestr."DomainObjectFactory";
+        return new $dof();
     }
-    private function setInstance(PersistenceFactory $pfact){
-        $this->instance = $pfact;
-        return $this->instance;
-    }
+    
+    static function getDomainObjectAssambler(PersistenceFactory $pfact){       
+        return new DomainObjectAssembler($pfact);
+    } 
     function finder(){
-        return new DomainObjectAssembler($this->instance);        
-    }    
-    static function getFinder($typestr){
-        $pfact=$typestr."PersistenceFactory"; 
-        return new DomainObjectAssembler($pfact::create());
-    }
+        return new DomainObjectAssembler($this);        
+    } 
 }
 
-class UserPersistenceFactory extends PersistenceFactory{   
+class UserPersistenceFactory extends PersistenceFactory{
+    protected $_objectType = "User";
     static function getType(){
         return "User";
     }  
 }
-class LocationPersistenceFactory extends PersistenceFactory{   
+class LocationPersistenceFactory extends PersistenceFactory{
+    protected $_objectType = "location";
     static function getType(){
         return "Location";
     }  
+}
+class LocationStructurePersistenceFactory extends PersistenceFactory{
+    protected $_objectType = "location";
+    static function getType(){
+        return "LocationStructure";
+    }   
 }
 
 

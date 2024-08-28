@@ -39,6 +39,19 @@ class LocationSelectionFactory extends SelectionFactory{
     }   
     function buildCore($fields) {
         return "SELECT $fields FROM 
+        (
+            (locations INNER JOIN location_types ON locations.type_id = location_types.id)
+            INNER JOIN location_structure ON locations.id = location_structure.child_id
+	)";
+    }
+}
+
+class LocationStructureSelectionFactory extends SelectionFactory{    
+    function __construct() {
+         print "Создается LocationCollectionSelectionFactory<br>";
+    }   
+    function buildCore($fields) {
+        return "SELECT $fields FROM 
             (
                 (location_structure INNER JOIN locations ON location_structure.child_id = locations.id)
                 INNER JOIN location_types ON locations.type_id = location_types.id

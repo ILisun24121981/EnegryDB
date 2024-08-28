@@ -10,17 +10,13 @@ abstract class Command {
         'CMD_INSUFFICIENT_DATA'=>3
     );
     
-    protected $_request;
     private $_status = 'CMD_DEFAULT';    
 
-    function __construct(Request $req) {
-        $this->_request = $req;     
-    }
-    function execute(){      
+    function execute(Request $req){      
         print ("<br>Выполнение команды ".get_class($this)."<br>");
         //здесь можно добавить общие действия для всех комманд  
-        $this->_status = $this->mainExecute();
-        $this->_request->setLastCommand($this);  
+        $this->_status = $this->mainExecute($req);
+        $req->setLastCommand($this);  
     } 
     
     function getStatus(){
@@ -36,25 +32,24 @@ abstract class Command {
         }
         return self::$STATUS_STRINGS[$str];
     }
-    abstract function mainExecute();    
+    abstract function mainExecute(Request $req);    
 }
 
 abstract class ValidateCommand extends Command{    
     protected $_validators = array();
     
-    function __construct(Request $req) {
+    function __construct() {
         Validator::init();
-        $this->setValidators();
-        parent::__construct($req);
+        $this->setValidators();   
     }
     protected function addValidator($field, $validator){       
         $this->_validators[$field][] = $validator;
     }
-    function validate(){
+    function validate(Request $req){
         $result = true;
         foreach ($this->_validators as $key => $fieldValidators) {          
             foreach ($fieldValidators as $validator) {
-                $val = $this->_request->get($key);
+                $val = $req->get($key);
                 $validationResult = $validator($val);               
                 if ($validationResult !== true) {
                     Validator::AddMassage($key, $validationResult);
@@ -64,16 +59,16 @@ abstract class ValidateCommand extends Command{
         }
         return $result;
     }
-    function mainExecute() {        
-        $validationresult = $this->validate();       
+    function mainExecute(Request $req) {        
+        $validationresult = $this->validate($req);       
         if(!$validationresult){
             print"Валидация провалена";
             return self::status('CMD_INSUFFICIENT_DATA') ;
         }
-        return $this->validExecute();
+        return $this->validExecute($req);
     }
     abstract function setValidators();
-    abstract function validExecute();
+    abstract function validExecute(Request $req);
 }
 
 

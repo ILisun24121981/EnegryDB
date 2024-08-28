@@ -1,8 +1,7 @@
 <?php
 
 require_once 'core/CommonBase.php';
-require_once 'core/ControllerMap.php';
-require_once 'core/ApplicationController.php';
+require_once 'core/Request.php';
 require_once 'core/Command.php';
 
 
@@ -66,13 +65,17 @@ require_once 'core/Command.php';
         $userParams['location_id'] = $ins->get('User_location_id');
         return $userParams;
     }
-    static function setDefaultCommandName($cmd_obj){
+    static function setDefaultCommand(Command $cmd_obj,Request $req){
         $ins = self::instance();
         $cmdName = trim(get_class($cmd_obj),'Command');
         $ins->set('DefaultCmdName',$cmdName);
+        $ins->set('DefaultCmdParams',$req->getAll());
     }
     static function getDefaultCommandName(){    
         return self::instance()->get('DefaultCmdName');
+    }
+    static function getDefaultCommandParams(){
+        return self::instance()->get('DefaultCmdParams');
     }
     static function clearAll(){
         session_unset();
@@ -81,32 +84,19 @@ require_once 'core/Command.php';
 
 class ApplicationRegistry extends SetGetValues{
     private static $instance;
-    private $freezedir = "Application\Data";
-    private $Configs = "Options.xml";   
-    private $ConfigMtime;
-    private $ApplicationController;
-    private $values = array();
-      
-                     
-    private function __construct() {       
-    }
+    private $_configDir = "Application\Data";
+    private $_configFile = "Configs.xml";   
+     
     static function instance(){
         if(!isset(self::$instance)){
             self::$instance = new self();
         }
         return self::$instance;
     }
-    function init(){
-        $dsn = $this->getDSN();
-        if(! is_null($dsn)){
-            return;
-        }
-        $this->getOptions();         
-    }
-    
-    private function getOptions(){       
+     
+    function init(){       
         $sep = DIRECTORY_SEPARATOR;
-        $path = $this->freezedir.$sep.$this->Configs;      
+        $path = $this->_configDir.$sep.$this->_configFile;      
         $this->ensure(file_exists($path), "Файл конфигурации не найден");       
         libxml_use_internal_errors(true);
         $options = @simplexml_load_file($path);       
@@ -125,42 +115,15 @@ class ApplicationRegistry extends SetGetValues{
         self::setUserDB($userDB);
         $passwordDB = (string)$options->passwordDB;      
         $this->ensure($passwordDB,"PassworsDB не найден");
-        self::setPasswordDB($passwordDB);
-        
-        $map = new ControllerMap();
-        $map->init($options);
-        
-        $req = RequestRegistry::getRequest();
-        $this->ApplicationController = new ApplicationController($map,$req);
+        self::setPasswordDB($passwordDB);     
     } 
     
     private function ensure($expr,$message){
         if(! $expr){
-            throw new AppException($message);
+            throw new Exception($message);
         }
     }  
-//    protected function get($key){
-//        $path = $this->freezedir.DIRECTORY_SEPARATOR.$this->configs;
-//        if(file_exists($path)){
-//            clearstatcache();
-//            $mtime = filemtime($path);
-//            if(! isset ($this ->mtimes[$key])){
-//                $this->mtimes[$key]=0;
-//            }
-//            if($mtime>$this->mtimes[$key]){
-//                $data = file_get_contents($path);
-//                $this->mtimes[$key]=$mtime;                
-//                return ($this->values[$key]=  unserialize($data));
-//            }     
-//        }  
-//   }    
-//    protected function set($key,$val){
-//        $path = $this->freezedir.DIRECTORY_SEPARATOR.$key;
-//        file_put_contents($path, serialize($val));
-//        $this->mtimes[$key]=time();
-//    }
-    
-//    
+
     static function  getDSN(){
         return self::instance()->get('dsn');
     }   
@@ -184,10 +147,5 @@ class ApplicationRegistry extends SetGetValues{
     }   
     static function setUser($user){
         return self::$instance->set('user',$user);
-    }
-    static function getApplicationController(){
-        return self::$instance->ApplicationController;
-    }   
+    } 
 }
-
-class AppException extends Exception{};

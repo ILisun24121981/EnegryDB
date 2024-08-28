@@ -1,4 +1,4 @@
 <?php
     include 'Views/Content/NaviMenu.php';
-    include 'Views/Content/HeaderMenu.php';
+    include 'Views/Content/ChapterMenu.php';
 ?>

@@ -10,8 +10,8 @@ ini_set('display_errors', 1);
 ini_set('session.save_path', __DIR__."/Application/Session/tmp");
 set_include_path(get_include_path().";".__DIR__."/Application");
 set_include_path(get_include_path().";".__DIR__."/Application/Views/ViewContent");
-require_once 'core/Controller.php';
+require_once 'core/Application.php';
 error_reporting( E_ALL & ~E_NOTICE );
-Controller::run();
+Application::run();
 
 ?>

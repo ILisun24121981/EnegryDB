@@ -1,1 +1,1 @@
-SessionRegistry|a:6:{s:7:"User_id";i:1;s:10:"User_login";s:6:"ILisun";s:9:"User_hash";s:32:"0e1c7d140705c3767eed661104ab93cf";s:12:"User_role_Id";i:1;s:16:"User_location_id";i:1;s:14:"DefaultCmdName";s:13:"LocationsList";}
+SessionRegistry|a:7:{s:7:"User_id";i:1;s:10:"User_login";s:6:"ILisun";s:9:"User_hash";s:32:"f4f267949b11ee9b37255907f621908b";s:12:"User_role_Id";i:1;s:16:"User_location_id";i:1;s:14:"DefaultCmdName";s:21:"LocationStructureBack";s:16:"DefaultCmdParams";a:3:{s:9:"parent_id";s:1:"2";s:2:"id";s:1:"2";s:3:"cmd";s:21:"LocationStructureBack";}}

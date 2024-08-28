@@ -118,8 +118,20 @@ class UserIdentityObject extends IdentityObject {
         parent::__construct(array('id', 'login', 'password', 'hash', 'role_id', 'location_id'));
     }
 }
-
 class LocationIdentityObject extends IdentityObject {
+    function __construct($field = null) {
+        print "Создается LocationIdentityObject<br>";
+        parent::__construct(array('id','name','comment','type_id','type_name','parent_id','parent_name'),
+                array ('id'=>'locations.id',
+                       'name'=>'locations.name',
+                       'comment'=>'locations.comment',
+                       'type_id'=>'location_types.id',
+                       'type_name'=>'location_types.name',
+                       'parent_id'=>'location_structure.parent_id',
+                       'parent_name'=>'locations.name'));       
+    }
+}
+class LocationStructureIdentityObject extends IdentityObject {
     function __construct($field = null) {
         print "Создается LocationIdentityObject<br>";
         parent::__construct(array('id','name','comment','type_name','parent_id'),

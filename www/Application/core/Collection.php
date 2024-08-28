@@ -84,7 +84,8 @@ class UserCollection extends Collection{
 }
 
 class LocationCollection extends Collection{
-    private $_parentLocationName;
+    private $_parentId;
+    private $_parentName;
     function __construct(array $raw = null,DomainObjectFactory $dofactory = null) {
         print "Создается LocationCollection<br>";
         parent::__construct($raw,$dofactory);
@@ -92,11 +93,23 @@ class LocationCollection extends Collection{
     function targetClass() {
         return "Location";
     }
-    function setParentLocationName($parentLocationName){
-        $this->_parentLocationName;
+    function setParentName($parentLocationName){
+        $this->_parentName = $parentLocationName;
     }
-    function getParentLocationName(){
-        return $this->_parentLocationName;
+    function getParentName(){
+        return $this->_parentName;
+    }
+    function setParentId($parentLocationId){
+        $this->_parentId = $parentLocationId;
+    }
+    function getParentId(){
+        return $this->_parentId;
+    }
+    function setGrandParentId($parentLocationId){
+        $this->_grandParentId = $parentLocationId;
+    }
+    function getGrandParentId(){
+        return $this->_grandParentId;
     }
 }
 

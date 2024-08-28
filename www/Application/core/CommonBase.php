@@ -5,21 +5,30 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 class SetGetValues {
-    private $values = array();
+    private $_values = array();
     
     public function get($key){
-        if(isset ($this->values[$key])){
-            return $this->values[$key];
+        if(isset ($this->_values[$key])){
+            return $this->_values[$key];
         }
         return null;
     }   
-    function set($key, $val) {
-        $this-> values[$key]=$val;
+    public function set($key, $val) {
+        $this-> _values[$key]=$val;
     }
     
-    protected function setAll($vals){
-        $this-> values = $vals;
+    public function setAll($vals){
+        $this->_values = $vals;
     }
+    public function getAll(){
+        if(empty($this->_values))
+            return null;
+        return $this->_values;
+    }   
+}
+
+function getXML(){
     
 }

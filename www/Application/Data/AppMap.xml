@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<control>   
-    <dsn>mysql:host=127.0.0.1;dbname=energydb;charset=UTF8</dsn>
-    <userDB>root</userDB>
-    <passwordDB>admin</passwordDB>
-    
+<structure> 
     <command name = "Default">   
         <classroot>Logout</classroot>                                                       
     </command>
-                               
     <command name = "Login">  
         <status value = "CMD_OK">        
-            <forward>LocationsList</forward>              
+            <forward>LocationStructure</forward>              
         </status>
         <status value = "CMD_ERROR">        
             <view>LoginView</view>              
@@ -20,19 +15,19 @@
            <view>LoginView</view>           
         </status>                                         
     </command>
-    
     <command name = "Logout">   
         <view>LoginView</view>                                                       
     </command>
-    
-    <command name = "LocationsList"> 
+    <command name = "LocationStructure"> 
         <status value = "CMD_OK">    
-            <view>LocationsListView</view> 
+            <view>LocationStructureView</view> 
         </status>                                                      
-    </command>
-    
-</control>
-
-   
- 
+    </command> 
+    <command name = "LocationStructureBack"> 
+        <status value = "CMD_OK">    
+            <view>LocationStructureView</view> 
+        </status>                                                      
+    </command> 
+     
+</structure> 
 

@@ -10,9 +10,9 @@ require_once 'core/Command.php';
 
 
 class LoginCommand extends ValidateCommand {
-    function validExecute() {      
+    function validExecute(Request $req) {      
         $Am = new AccessOpenModel();
-        $res = $Am->process($this->_request);        
+        $res = $Am->process($req);        
         if(!$res){
            return self::status('CMD_ERROR') ;
         }       

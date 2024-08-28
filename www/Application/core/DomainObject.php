@@ -74,7 +74,7 @@ class User extends DomainObject {
     private $_role_id;
     private $_location_id;
     
-    protected $_locationCollection;
+    protected $_locations;
     
 
     function __construct(array $array) { 
@@ -135,16 +135,15 @@ class User extends DomainObject {
     function getLocationId() {
         return $this->_location_id;
     }
-    function setLocationsCollection(LocationCollection $locations) {
-        $this->_locationCollection = $locations;
+    function setLocations(LocationCollection $locations) {
+        $this->_locations = $locations;
     }
-
-    function getLocationsCollection() {      
-        return $this->_locationCollection;
+    function getLocations() {      
+        return $this->_locations;
     }
 }
 
-class Location extends DomainObject {
+class Location extends DomainObject {   
     private $_type;
     private $_name;
     private $_comment;

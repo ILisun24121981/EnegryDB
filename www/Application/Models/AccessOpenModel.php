@@ -19,26 +19,26 @@ require_once 'core/Registry.php';
 class AccessOpenModel {    
     function process(Request $req){         
         $login = $req->get('login');        
-        $password =$req->get('password');              
-        $finder = PersistenceFactory::getFinder('User');
-        $idobj = $finder->factory->getIdentityObject();
+        $password =$req->get('password'); 
+        $pfact = PersistenceFactory::getInstance("User");
+        $doa = PersistenceFactory::getDomainObjectAssambler($pfact);
+        $idobj = $pfact->getIdentityObject();
         $idobj->compField('login')->eq($login);   
-        $user = $finder->findOne($idobj);
+        $raw = $doa->find($idobj);
+        $user = $pfact->getCollection($raw)->next();
         if(is_null($user)){
-            $req->addFeedback("Проверьте Логин");
-            //print "AccessModel res:FALSE<br>";  
+            $req->addFeedback("Проверьте Логин");            
             return false;            
         }
         if($user->getPassword() != $password){
-            $req->addFeedback("Проверьте Пароль");
-            //print "AccessModel res:FALSE<br>";
+            $req->addFeedback("Проверьте Пароль"); 
             return false;
         }
         //установим hash       
         $hash = md5($this->generateCode(10));
         $user->setHash($hash);        
         //обновим в БД
-        $finder->insert($user);       
+        $doa->insert($user);       
         SessionRegistry::setUserParams($user);
         print "AccessModel res:TRUE<br>";
         return true;

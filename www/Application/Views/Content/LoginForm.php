@@ -17,7 +17,7 @@
 
 <div>    
     <p>Авторизация</p>  
-    <form method = "GET" id = "LoginForm" >
+    <form method = "POST" id = "LoginForm" >
         <?php 
         if(isset($massage) && !is_null($massage)){
             echo "<label> $massage </label>";

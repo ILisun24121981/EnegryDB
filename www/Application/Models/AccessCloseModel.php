@@ -5,13 +5,15 @@ require_once 'core/PersistenceFactory.php';
 class AccessCloseModel{
     function process(){
         $userParams = SessionRegistry::getUserParams();
-        if(!is_null($userParams['login'])){      
-            $finder = PersistenceFactory::getFinder('User');
-            $idobj = $finder->factory->getIdentityObject();
+        if(!is_null($userParams['login'])){
+            $pfact = PersistenceFactory::getInstance("User");
+            $doa = PersistenceFactory::getDomainObjectAssambler($pfact);           
+            $idobj = $pfact->getIdentityObject();
             $idobj->compField('login')->eq($userParams['login']);
-            $obj = $finder->findOne($idobj);
-            $obj->setHash(null);
-            $finder->insert($obj);           
+            $raw = $doa->find($idobj);
+            $user = $pfact->getCollection($raw)->next();
+            $user->setHash(null);
+            $doa->insert($user);           
         }        
     }
 }

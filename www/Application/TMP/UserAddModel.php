@@ -21,8 +21,8 @@ class UserAddModel extends Model {
                      
         $factory = UserPersistenceFactory::create();
         $obj = $factory->getDomainObjectFactory()->createObject($array);      
-        $finder = $factory->finder();
-        $finder->insert($obj);
+        $doa = $factory->finder();
+        $doa->insert($obj);
         $this->req->addFeedback("Пользователь успешно добавлен");
         return true;
     }

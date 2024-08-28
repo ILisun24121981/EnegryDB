@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+ <configs>
+    <dsn>mysql:host=127.0.0.1;dbname=energydb;charset=UTF8</dsn>
+    <userDB>root</userDB>
+    <passwordDB>admin</passwordDB>
+ </configs>   
+  
+   
+ 
+

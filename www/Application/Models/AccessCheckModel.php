@@ -19,10 +19,12 @@ class AccessCheckModel{
             $user = ObjectWatcher::exists('User', $userParams['id']);
             if(is_null($user)){
                 //ищем в базе данных
-                $finder = PersistenceFactory::getFinder('User');
-                $idobj = $finder->factory->getIdentityObject();
+                $pfact = PersistenceFactory::getInstance("User");
+                $doa = PersistenceFactory::getDomainObjectAssambler($pfact);
+                $idobj = $pfact->getIdentityObject();
                 $idobj->compField('login')->eq($userParams['login']);
-                $user = $finder->findOne($idobj); 
+                $raw = $doa->find($idobj);
+                $user = $pfact->getCollection($raw)->next();
                 if (is_null($user)){
                     $this->req->addFeedback("Пользователь не определен");
                     print "AccessCheckModel res:FALSE1<br>";

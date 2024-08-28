@@ -2,27 +2,30 @@
 
 require_once 'core/Registry.php';
 require_once 'core/Request.php';
-require_once 'core/Controller.php';
+require_once 'core/AppController.php';
 require_once 'core/View.php';
 
 abstract class ProcessRequest {
-    abstract function process();
+    abstract function process(Request $req);
 }
 
-abstract class DecorateProcess extends ProcessRequest {
-    protected $processrequest;
+abstract class DecorateProcess extends ProcessRequest{
+    protected $_processrequest;
     function __construct(ProcessRequest $pr) {
-        $this->processrequest = $pr;
+        $this->_processrequest = $pr;
     }
 }
 
 class MainProcess extends ProcessRequest {
-    function process() {       
-        $app_c = ApplicationRegistry::getApplicationController();
-        while ($cmd = $app_c->getCommand()) {
-            $cmd->execute();
+    private $_appController;
+    function __construct(AppController $appC){
+       $this->_appController = $appC; 
+    }
+    function process(Request $req) {      
+        while ($cmd = $this->_appController->getCommand($req)) {
+            $cmd->execute($req);
         }
-        $this->invokeView($app_c->getView());       
+        $this->invokeView($this->_appController->getView($req));       
     }
     function invokeView($target) {
         print "<br>Вид:$target";
@@ -33,16 +36,19 @@ class MainProcess extends ProcessRequest {
 }
 
 class LogRequest extends DecorateProcess {
-    function process() {
+    function process(Request $req) {
         //print __CLASS__.":регистрация запроса <br>";
-        $this->processrequest->process();
+        $this->_processrequest->process($req);
     }
 }
 
 class SessionRequest extends DecorateProcess {
-    function process() {
-        SessionRegistry::instance();
+    function process(Request $req) {
         //print __CLASS__.":Создание Сессии <br>";
-        $this->processrequest->process();
+        SessionRegistry::instance();
+        if (!$req->get('cmd')){
+            $req->setAll(SessionRegistry::getDefaultCommandParams());
+        }
+        $this->_processrequest->process($req);
     }
 }

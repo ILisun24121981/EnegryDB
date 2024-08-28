@@ -1,15 +1,11 @@
-  
-<?php 
-
-    $locations= $user->getLocationsCollection();
-    
+<?php   
     if ($locations){
         echo    '<table>
-                    <caption>
-                        <<Список локаций';
-                    $parentName = $locations->getParentLocationName();
+                    <caption >
+                        << Редактирование локации >>';
+                    $parentName = $locations->getParentName();
                     if($parentName){
-                       echo  'в составе'.$parentName.'>>'; 
+                       echo  ' '.$parentName.'>>'; 
                     }else{
                        echo '>>';
                     }
@@ -26,10 +22,10 @@
         $n = 1;
         while(!is_null($loc = $locations->next())){
             echo        '<tr id ='.$loc->getId().'> 
-                            <td>'.$n.'</td>
-                            <td>'.$loc->getName().'</td>
-                            <td>'.$loc->getType().'</td> 
-                            <td>'.$loc->getComment().'</td> 
+                            <td id = "number">'.$n.'</td>
+                            <td id = "name" value = "'.$loc->getName().'">'.$loc->getName().'</td>
+                            <td id = "type">'.$loc->getType().'</td> 
+                            <td id = "comment">'.$loc->getComment().'</td> 
                         </tr>';
         $n++;
         }
@@ -46,4 +42,3 @@
         echo '<lable> Список локаций пуст </label>';
     } 
 ?>
-

@@ -1,5 +1,5 @@
 <p> Разделы </p>   
-<form method = "GET" id = "HeaderMenu" >
+<form method = "GET" id = "ChapterMenu" >
     <?php 
     echo'<button  name = "cmd" type="submit" value = "Items">Номенклатура</button>
          <button  name = "cmd" type="submit" value = "Parts">Склад</button>';

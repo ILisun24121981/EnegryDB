@@ -105,6 +105,6 @@ table {
     /*Внешнюю границу таблицы */
     border: 2px solid grey;
 }
-tr:hover td {
+/*tr:hover td {
     background: #e8edff;
-}
+}*/

@@ -9,8 +9,8 @@ class LocationCreateModel extends Model {
                
         $factory = locationPersistenceFactory::create();
         $obj = $factory->getDomainObjectFactory()->createObject($array);      
-        $finder = $factory->finder();
-        $finder->insert($obj);
+        $doa = $factory->finder();
+        $doa->insert($obj);
         $this->req->addFeedback("Локация успешно добавлена");
         print "locationAddModel res:TRUE<br>";
         return true;

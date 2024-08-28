@@ -11,18 +11,36 @@
  *
  * @author Lisun
  */
-class ControllerMap {
-    private $viewMap        = array();
-    private $forwardMap     = array();
-    private $classrootMap   = array();
+class AppMap {
+    private $_mapDir = "Application\Data";
+    private $_mapFile = "AppMap.xml";   
+    private $_viewMap        = array();
+    private $_forwardMap     = array();
+    private $_classrootMap   = array();
     
-    function init(SimpleXMLElement &$options){
-        foreach ($options->view as $default_view){           
+    function init(){
+        $sep = DIRECTORY_SEPARATOR;
+        $path = $this->_mapDir.$sep.$this->_mapFile;      
+        if( !file_exists($path)){
+            throw new Exception("Файл карты не найден");
+        }
+        libxml_use_internal_errors(true);
+        $map = @simplexml_load_file($path);       
+        if ($map === false) {
+            echo "Ошибка загрузки XML\n";
+            foreach(libxml_get_errors() as $error) {
+                echo "\t", $error->message;
+            }
+        }       
+        if( !($map instanceof SimpleXMLElement)){
+            throw new Exception("Файл карты запорчен");
+        }
+        foreach ($map->view as $default_view){           
             $stat_str = trim($default_view['status']);
             $status = Command::status($stat_str);
             $this->addview( trim((string)$default_view),'default',$status);                                 
         }                     
-        foreach ($options->command as $command){
+        foreach ($map->command as $command){
             $cmd_name= trim($command['name']);
             if(isset($command->classroot)){
                 $this->addClassroot($cmd_name,trim((string)$command->classroot[0]));
@@ -57,34 +75,34 @@ class ControllerMap {
     }
     
     function addClassroot($command,$classroot){
-        $this->classrootMap[$command] = $classroot;
+        $this->_classrootMap[$command] = $classroot;
     }
     
     function getClassroot($command){
-        if(isset($this->classrootMap[$command])){
-            return $this->classrootMap[$command];
+        if(isset($this->_classrootMap[$command])){
+            return $this->_classrootMap[$command];
         }
         return $command;
     }
     
     function addView($view,$command='default',$status = 0){
-        $this->viewMap[$command][$status] = $view;
+        $this->_viewMap[$command][$status] = $view;
     }
     
     function getView($command, $status){
-        if(isset($this->viewMap[$command][$status])){
-            return $this->viewMap[$command][$status];
+        if(isset($this->_viewMap[$command][$status])){
+            return $this->_viewMap[$command][$status];
         }
         return null;
     }
     
     function addForward($command,$newCommand,$status = 0){
-        $this->forwardMap[$command][$status] = $newCommand;
+        $this->_forwardMap[$command][$status] = $newCommand;
     }
     
     function getForward($command,$status){
-         if(isset($this->forwardMap[$command][$status])){
-            return $this->forwardMap[$command][$status];
+         if(isset($this->_forwardMap[$command][$status])){
+            return $this->_forwardMap[$command][$status];
         }
         return null;
     }
